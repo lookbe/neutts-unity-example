@@ -4,17 +4,16 @@ High-performance, on-device Text-to-Speech implementation for Unity. This versio
 
 ## 🚀 Key Features
 * **Engine:** English-only synthesis.
-* **No Dependencies:** No system-level installation of eSpeak required.
 * **Inference:** Fully local using GGUF for the backbone and ONNX for the codec and phonemizer.
 
 ---
 
 ## 📦 1. Required Files
-Place the following files into your project's `Assets/StreamingAssets` folder.
+Store these files in a permanent directory on your local machine (e.g., `C:/Models/NeuTTS/` or `/Users/Shared/Models/`).
 
 ### A. Synthesis & Codec (Neuphonic)
-* **Backbone:** A Neuphonic GGUF model (e.g., `neutts-air-q4.gguf` or any variant from Neuphonic).
-* **Codec Decoder:** `decoder_model.onnx` (This is the **NeuCodec ONNX** model).
+* **Backbone:** A Neuphonic GGUF model (e.g., `neutts-air-q4.gguf`).
+* **Codec Decoder:** `decoder_model.onnx` (NeuCodec ONNX model).
 
 ### B. Phonemizer ([lookbe/open-phonemizer-onnx](https://huggingface.co/lookbe/open-phonemizer-onnx))
 * `model.onnx`
@@ -22,13 +21,13 @@ Place the following files into your project's `Assets/StreamingAssets` folder.
 * `phoneme_dict.json`
 
 ### C. Voice Reference
-* `sample.json` (Reference voice codes converted from `.pt`).
-* `sample_transcript.txt` (The matching text for the reference voice).
+* `sample.json` (Reference voice codes).
+* `sample_transcript.txt` (Matching text for the reference voice).
 
 ---
 
 ## 🛠 2. Preparation: Reference Conversion
-Unity cannot read PyTorch `.pt` files directly. Use this Python script to convert your reference voice codes to plain JSON before moving them to `StreamingAssets`:
+Unity cannot read PyTorch `.pt` files directly. Use this Python script to convert your reference voice codes to plain JSON before use:
 
 ```python
 import torch
@@ -49,12 +48,13 @@ def convert_pt_to_json(input_file, output_file):
 
 ## 🖥️ How to Run
 
-1.  **Prepare StreamingAssets:** Ensure all required files (GGUF, NeuCodec ONNX, Phonemizer ONNX, tokenizer, dict, and reference JSON) are placed inside the `Assets/StreamingAssets` folder.
+1.  **Organize Files:** Place all required models and configuration files in a dedicated folder on your hard drive (outside of the Unity project).
 2.  **Open Scene:** Open the `BasicNeuTTS` scene in the Unity Editor.
 3.  **Find NeuTTS Object:** Select the **NeuTTS** GameObject in the Hierarchy window.
-4.  **Update Paths:** In the Inspector, locate the file path fields. Enter the paths **relative to StreamingAssets**.
-    * **Example 1 (Root):** If the file is directly in StreamingAssets, just enter the name: `neutts-air-q4.gguf`
-    * **Example 2 (Folder):** If the file is in a folder, include the folder name: `Models/decoder_model.onnx`
-5.  **Press Play:** Click the **Play** button in Unity. The system will initialize the models and process the text using the local English-only pipeline.
+4.  **Input Absolute Paths:** In the Inspector, enter the full system path for each required file:
+    * **Windows Example:** `C:\Users\Name\Models\NeuTTS\neutts-air-q4.gguf`
+    * **macOS/Linux Example:** `/Users/Name/Models/NeuTTS/decoder_model.onnx`
+    * *Note: Do not use relative paths or StreamingAssets syntax. Ensure the path points exactly to where the file is stored on your disk.*
+5.  **Press Play:** Click the **Play** button in Unity. The system will load the models directly from the specified absolute locations and initialize the synthesis pipeline.
 
 ---
