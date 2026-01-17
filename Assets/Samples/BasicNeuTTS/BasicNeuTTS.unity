@@ -1608,23 +1608,6 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 5}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 1, y: 0}
---- !u!1 &1938246558 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7338708310858179489, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-  m_PrefabInstance: {fileID: 3776753093076102040}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1938246563
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1938246558}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 412c3c33fb7133942a5817bdbcbcf0c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2087347208
 GameObject:
   m_ObjectHideFlags: 0
@@ -1811,45 +1794,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: refAudioPath
-      value: sample/sample.json
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: neuttsModelPath
-      value: tts/neutts.gguf
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: refTranscriptPath
-      value: sample/sample.txt
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: phonemizerDictPath
-      value: phonemizer/phoneme_dict.json
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: phonemizerModelPath
-      value: phonemizer/model.onnx
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: phonemizerConfigPath
-      value: phonemizer/tokenizer.json
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: neucodecDecoderModelPath
-      value: neucodec/decoder_model.onnx
-      objectReference: {fileID: 0}
     - target: {fileID: 6589137928585749601, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
       propertyPath: m_Name
       value: NeuTTS
-      objectReference: {fileID: 0}
-    - target: {fileID: 7678393671269839111, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: temperature
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7678393671269839111, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      propertyPath: repeatPenalty
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8124312796375239317, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1894,10 +1841,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7338708310858179489, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1938246563}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
 --- !u!114 &9031426685434804052 stripped
 MonoBehaviour:

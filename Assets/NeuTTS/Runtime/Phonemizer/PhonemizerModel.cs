@@ -223,7 +223,7 @@ namespace NeuTTS
         {
             if (string.IsNullOrEmpty(prompt))
             {
-                Debug.LogError("empty prompt");
+                Debug.LogWarning("empty prompt");
                 return;
             }
 

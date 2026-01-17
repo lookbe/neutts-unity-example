@@ -63,6 +63,7 @@ namespace NeuTTS
             string user = $"user: Convert the text to speech:<|TEXT_PROMPT_START|>{inputPayload.Transcript} {inputPayload.Prompt}<|TEXT_PROMPT_END|>";
             string assistant = $"assistant:<|SPEECH_GENERATION_START|>{inputPayload.AudioText}";
             string prompt = $"{user}\n{assistant}";
+
             int[] prompt_token = Tokenize(prompt);
 
             var payload = new GenerationPayload()

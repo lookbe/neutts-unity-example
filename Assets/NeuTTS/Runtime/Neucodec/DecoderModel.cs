@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NeuTTS
@@ -82,9 +83,6 @@ namespace NeuTTS
                     throw new System.Exception("unable to load model");
                 }
 
-                //string warmupText = "<|speech_1|><|speech_2|><|speech_3|><|speech_4|><|speech_5|>";
-                //DecodeInternal(warmupText, cts);
-
                 Debug.Log("Load model done");
                 PostStatus(ModelStatus.Ready);
             }
@@ -97,9 +95,15 @@ namespace NeuTTS
             }
         }
 
+        private ulong _inputIndex = 0;
+        private ulong _nextExpectedIndex = 0;
+        private Dictionary<ulong, float[]> _responseCache = new Dictionary<ulong, float[]>();
+        private Dictionary<ulong, Task> _backgroundTasks = new Dictionary<ulong, Task>();
+
         private class DecodePayload : IBackgroundPayload
         {
             public string Codes;
+            public ulong Index;
         }
 
         public void Decode(string codes)
@@ -107,7 +111,7 @@ namespace NeuTTS
             // harcoded value from onnx
             if (string.IsNullOrEmpty(codes))
             {
-                Debug.LogError("wrong codes");
+                Debug.LogWarning("wrong codes");
                 return;
             }
 
@@ -124,24 +128,43 @@ namespace NeuTTS
             }
 
             status = ModelStatus.Generate;
-            RunBackground(new DecodePayload() { Codes = codes }, RunDecode);
+            RunBackgroundDecode(codes);
+        }
+
+        protected void RunBackgroundDecode(string codes)
+        {
+            ulong index = _inputIndex++;
+            _responseCache[index] = null;
+
+            CancellationTokenSource cts = new CancellationTokenSource();
+            DecodePayload payload = new DecodePayload() { Codes = codes, Index = index };
+
+            var task = Task.Run(() =>
+            {
+                try
+                {
+                    RunDecode(payload, cts.Token);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"Error in background task: {ex.Message}");
+                }
+            }, cts.Token);
+
+            _backgroundTasks[index] = task;
         }
 
         void RunDecode(DecodePayload payload, CancellationToken cts)
         {
             try
             {
-                float[] byteArray = DecodeInternal(payload.Codes, cts);
-                PostResponse(byteArray);
+                float[] audioData = DecodeInternal(payload.Codes, cts);
+                PostResponse(payload.Index, audioData);
             }
             catch (System.Exception ex)
             {
                 Debug.LogError($"An unexpected error occurred during RunDecode: {ex.Message}");
-                PostResponse(new float[0]);
-            }
-            finally
-            {
-                PostStatus(ModelStatus.Ready);
+                PostResponse(payload.Index, new float[0]);
             }
 
         }
@@ -193,49 +216,35 @@ namespace NeuTTS
             _session?.Dispose();
         }
 
-        void PostResponse(float[] response)
+        void PostResponse(ulong index, float[] response)
         {
-            unityContext?.Post(_ => OnResponseGenerated?.Invoke(response), null);
+            unityContext?.Post(_ => ProcessResponse(index, response), null);
         }
 
-        float[] LinearOverlapAdd(List<float[]> frames, int stride)
+        // process this on main unity thread
+        void ProcessResponse(ulong index, float[] response)
         {
-            if (frames.Count == 0) return Array.Empty<float>();
+            _backgroundTasks.Remove(index);
+            _responseCache[index] = response;
 
-            // Calculate total size
-            int totalSize = 0;
-            for (int i = 0; i < frames.Count; i++)
+            while (true)
             {
-                int frameEnd = stride * i + frames[i].Length;
-                if (frameEnd > totalSize) totalSize = frameEnd;
-            }
-
-            float[] outBuf = new float[totalSize];
-            float[] sumWeight = new float[totalSize];
-
-            int offset = 0;
-            foreach (var frame in frames)
-            {
-                int frameLength = frame.Length;
-                for (int j = 0; j < frameLength; j++)
+                _responseCache.TryGetValue(_nextExpectedIndex, out float[] nextResponse);
+                if (nextResponse == null)
                 {
-                    // Linear weight: weight = np.abs(0.5 - (t - 0.5))
-                    float t = (float)(j + 1) / (frameLength + 1);
-                    float weight = Math.Abs(0.5f - (t - 0.5f));
-
-                    outBuf[offset + j] += weight * frame[j];
-                    sumWeight[offset + j] += weight;
+                    break;
                 }
-                offset += stride;
+
+                OnResponseGenerated?.Invoke(nextResponse);
+
+                _responseCache.Remove(_nextExpectedIndex);
+                _nextExpectedIndex++;
             }
 
-            // Normalize by weights
-            for (int i = 0; i < outBuf.Length; i++)
+            if (_responseCache.Count == 0)
             {
-                if (sumWeight[i] > 0) outBuf[i] /= sumWeight[i];
+                status = ModelStatus.Ready;
             }
-
-            return outBuf;
         }
     }
 }

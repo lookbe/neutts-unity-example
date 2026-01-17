@@ -229,6 +229,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 412c3c33fb7133942a5817bdbcbcf0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  model: {fileID: 7678393671269839111}
+  decoder: {fileID: 4779038698026236422}
+  streamChunkSize: 240
 --- !u!114 &593532794564494247
 MonoBehaviour:
   m_ObjectHideFlags: 0

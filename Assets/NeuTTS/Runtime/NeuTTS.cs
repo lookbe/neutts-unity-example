@@ -106,6 +106,7 @@ namespace NeuTTS
         {
             if (string.IsNullOrEmpty(prompt))
             {
+                Debug.LogWarning("invalid prompt");
                 return;
             }
 
@@ -127,8 +128,7 @@ namespace NeuTTS
             yield return new WaitUntil(() => decoder.status == ModelStatus.Ready);
 
             // Wait for all audio samples to be played
-            //yield return new WaitUntil(() => audioQueue.Count == 0);
-            yield return new WaitUntil(() => !audioSource.isPlaying);
+            yield return new WaitUntil(() => audioQueue.Count == 0);
             status = ModelStatus.Ready;
         }
 
@@ -143,7 +143,7 @@ namespace NeuTTS
             neutts.Stop();
         }
 
-        // harcoded value from snac decoder
+        // harcoded value from decoder
         private const int SampleRate = 24000;
         private const int Channels = 1;
 
@@ -154,9 +154,9 @@ namespace NeuTTS
             phonemizer = GetComponentInChildren<PhonemizerModel>();
             audioSource = GetComponent<AudioSource>();
 
-            //audioSource.clip = AudioClip.Create("StreamingClip", SampleRate * 60, Channels, SampleRate, true, OnAudioRead);
-            //audioSource.loop = true;
-            //audioSource.Play();
+            audioSource.clip = AudioClip.Create("StreamingClip", SampleRate * 60, Channels, SampleRate, true, OnAudioRead);
+            audioSource.loop = true;
+            audioSource.Play();
         }
 
         private void OnEnable()
@@ -165,7 +165,6 @@ namespace NeuTTS
             decoder.OnStatusChanged += OnModelStatusChanged;
             phonemizer.OnStatusChanged += OnModelStatusChanged;
 
-            neutts.OnResponseGenerated += OnLLMResponse;
             phonemizer.OnResponseGenerated += OnPhonemeResponse;
             decoder.OnResponseGenerated += OnResponseGenerated;
         }
@@ -176,7 +175,6 @@ namespace NeuTTS
             decoder.OnStatusChanged -= OnModelStatusChanged;
             phonemizer.OnStatusChanged -= OnModelStatusChanged;
 
-            neutts.OnResponseGenerated -= OnLLMResponse;
             phonemizer.OnResponseGenerated -= OnPhonemeResponse;
             decoder.OnResponseGenerated -= OnResponseGenerated;
         }
@@ -193,43 +191,23 @@ namespace NeuTTS
         string transcript = string.Empty;
         string audioText = string.Empty;
 
-        void OnLLMResponse(string codes)
-        {
-            if (!string.IsNullOrEmpty(codes))
-            {
-                decoder.Decode(codes);
-                Debug.Log($"start decoding {codes}");
-            }
-            else
-            {
-                Debug.LogWarning("not generating any token");
-            }
-        }
-
         void OnPhonemeResponse(string phonemeString)
         {
-            Debug.Log($"phoneme{phonemeString}");
-
             if (string.IsNullOrEmpty(transcript))
             {
                 transcript = phonemeString;
             }
             else
             {
+                Debug.Log($"prompt: {phonemeString}");
                 neutts.PromptWithClone(phonemeString, transcript, audioText);
             }
         }
 
         void OnResponseGenerated(float[] audioChunk)
         {
-            Debug.Log("start play audio");
-            //foreach (var s in audioChunk)
-            //    audioQueue.Enqueue(s);
-
-            AudioClip clip = AudioClip.Create("GeneratedSpeech", audioChunk.Length, 1, 24000, false);
-            clip.SetData(audioChunk, 0);
-
-            audioSource.PlayOneShot(clip);
+            foreach (var s in audioChunk)
+                audioQueue.Enqueue(s);
         }
 
         private void OnAudioRead(float[] data)
