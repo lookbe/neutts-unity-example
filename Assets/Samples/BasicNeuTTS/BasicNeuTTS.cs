@@ -13,7 +13,7 @@ public class BasicNeuTTS : MonoBehaviour
 
     void Start()
     {
-        tts.InitModel();
+        //tts.InitModel();
         sendButton.onClick.AddListener(OnSendButtonClicked);
     }
 

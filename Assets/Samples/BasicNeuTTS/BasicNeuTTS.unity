@@ -1156,6 +1156,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1051835908}
+  - component: {fileID: 1051835910}
   - component: {fileID: 1051835909}
   m_Layer: 0
   m_Name: BasicNeuTTS
@@ -1188,13 +1189,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1051835905}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00accf461dbe10348930fb830926da84, type: 3}
+  m_Script: {fileID: 11500000, guid: ab6b460743facd1489b5e7236e0f0e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tts: {fileID: 9031426685434804052}
+--- !u!114 &1051835910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051835905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a983722f320fea24dad7da17a9dee0db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   tts: {fileID: 9031426685434804052}
   chatHistory: {fileID: 278746469}
   chatInputField: {fileID: 331307739}
   sendButton: {fileID: 1718677244}
+  canvasRect: {fileID: 1332554877}
+  inputRect: {fileID: 1663740404}
+  chatRect: {fileID: 529759300}
 --- !u!1 &1292352599
 GameObject:
   m_ObjectHideFlags: 0
@@ -1720,6 +1737,34 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: refAudioPath
+      value: sample/sample.json
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: neuttsModelPath
+      value: tts/neutts.gguf
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: refTranscriptPath
+      value: sample/sample.txt
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: phonemizerDictPath
+      value: phonemizer/phoneme_dict.json
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: phonemizerModelPath
+      value: phonemizer/model.onnx
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: phonemizerConfigPath
+      value: phonemizer/tokenizer.json
+      objectReference: {fileID: 0}
+    - target: {fileID: 3730806139419608933, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
+      propertyPath: neucodecDecoderModelPath
+      value: neucodec/decoder_model.onnx
+      objectReference: {fileID: 0}
     - target: {fileID: 6589137928585749601, guid: 7c47bde0a04d2cb4d82e6629a277cefd, type: 3}
       propertyPath: m_Name
       value: NeuTTS
