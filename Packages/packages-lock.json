@@ -7,13 +7,6 @@
       "dependencies": {},
       "hash": "e37fb4cfae548a46afc9a45824234c7b481ac108"
     },
-    "ai.lookbe.obbmount": {
-      "version": "https://github.com/lookbe/obb-mount-unity.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "d7e040cff5d14028cfdd26a6eb2a9e0562152f0a"
-    },
     "com.github.asus4.onnxruntime": {
       "version": "0.4.2",
       "depth": 0,
@@ -29,13 +22,6 @@
         "com.github.asus4.onnxruntime": "0.4.2"
       },
       "url": "https://registry.npmjs.com"
-    },
-    "com.mopsicus.umi": {
-      "version": "https://github.com/mopsicus/umi.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "ba206bad1ca37892dadebc89dc9274135771f8c2"
     },
     "com.unity.ai.navigation": {
       "version": "2.0.9",
