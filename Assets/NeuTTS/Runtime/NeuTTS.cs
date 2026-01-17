@@ -24,7 +24,7 @@ namespace NeuTTS
         public string refTranscriptPath;
 
         protected NeuTTSModel neutts;
-        protected NeucodecDecoderModel decoder;
+        protected DecoderModel decoder;
         protected PhonemizerModel phonemizer;
         protected AudioSource audioSource;
 
@@ -150,7 +150,7 @@ namespace NeuTTS
         private void Awake()
         {
             neutts = GetComponentInChildren<NeuTTSModel>();
-            decoder = GetComponentInChildren<NeucodecDecoderModel>();
+            decoder = GetComponentInChildren<DecoderModel>();
             phonemizer = GetComponentInChildren<PhonemizerModel>();
             audioSource = GetComponent<AudioSource>();
 
@@ -195,8 +195,15 @@ namespace NeuTTS
 
         void OnLLMResponse(string codes)
         {
-            Debug.Log($"start decoding {codes}");
-            decoder.Decode(codes);
+            if (!string.IsNullOrEmpty(codes))
+            {
+                decoder.Decode(codes);
+                Debug.Log($"start decoding {codes}");
+            }
+            else
+            {
+                Debug.LogWarning("not generating any token");
+            }
         }
 
         void OnPhonemeResponse(string phonemeString)

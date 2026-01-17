@@ -80,7 +80,12 @@ namespace NeuTTS
         }
         protected override bool EndGeneration(int token, int generated_token_count)
         {
-            return Native.llama_vocab_is_eog(_llamaVocab, token) || token == 151670;
+            int[] prompt_token = Tokenize("<|SPEECH_GENERATION_END|>");
+            if (prompt_token.Length > 0)
+            {
+                return token == prompt_token[0];
+            }
+            return Native.llama_vocab_is_eog(_llamaVocab, token);
         }
     }
 }

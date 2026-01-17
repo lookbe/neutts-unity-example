@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace NeuTTS
 {
-    public class NeucodecDecoderModel : BackgroundRunner
+    public class DecoderModel : BackgroundRunner
     {
         [Header("Model")]
         public string modelPath = string.Empty;
@@ -82,8 +82,8 @@ namespace NeuTTS
                     throw new System.Exception("unable to load model");
                 }
 
-                string warmupText = "<|speech_1|><|speech_2|><|speech_3|><|speech_4|><|speech_5|>";
-                DecodeInternal(warmupText, cts);
+                //string warmupText = "<|speech_1|><|speech_2|><|speech_3|><|speech_4|><|speech_5|>";
+                //DecodeInternal(warmupText, cts);
 
                 Debug.Log("Load model done");
                 PostStatus(ModelStatus.Ready);
