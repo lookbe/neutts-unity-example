@@ -58,6 +58,3 @@ def convert_pt_to_json(input_file, output_file):
 5.  **Press Play:** Click the **Play** button in Unity. The system will initialize the models and process the text using the local English-only pipeline.
 
 ---
-
-5.  **Press Play:** Click the **Play** button in Unity. The system will initialize the models and process the text using the local English-only pipeline.
-
